@@ -1,6 +1,39 @@
-import React from "react";
+import { React, useState } from "react";
 
-const SignUpForm = ({ onRouteChange }) => {
+const SignUpForm = ({ onRouteChange, loadUser }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+
+  const onNameChange = event => {
+    setName(event.target.value);
+  };
+
+  const onEmailChange = event => {
+    setEmail(event.target.value);
+  };
+
+  const onPasswordChange = event => {
+    setPassword(event.target.value);
+  };
+
+  const onSubmitSignUp = async () => {
+    const response = await fetch("http://localhost:3000/signup", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        name: name,
+      }),
+    });
+    const user = await response.json();
+    if (user) {
+      loadUser(user);
+      onRouteChange("home");
+    }
+  };
+
   return (
     <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
       <main className="pa4 black-80">
@@ -16,6 +49,7 @@ const SignUpForm = ({ onRouteChange }) => {
                 type="email"
                 name="name"
                 id="name"
+                onChange={event => onNameChange(event)}
               />
             </div>
             <div className="mt3">
@@ -27,6 +61,7 @@ const SignUpForm = ({ onRouteChange }) => {
                 type="email"
                 name="email-address"
                 id="email-address"
+                onChange={event => onEmailChange(event)}
               />
             </div>
             <div className="mv3">
@@ -38,6 +73,7 @@ const SignUpForm = ({ onRouteChange }) => {
                 type="password"
                 name="password"
                 id="password"
+                onChange={event => onPasswordChange(event)}
               />
             </div>
           </fieldset>
@@ -46,7 +82,7 @@ const SignUpForm = ({ onRouteChange }) => {
               className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
               type="submit"
               value="Sign Up"
-              onClick={() => onRouteChange("home")}
+              onClick={() => onSubmitSignUp()}
             />
           </div>
         </div>
