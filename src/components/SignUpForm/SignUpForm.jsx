@@ -18,15 +18,18 @@ const SignUpForm = ({ onRouteChange, loadUser }) => {
   };
 
   const onSubmitSignUp = async () => {
-    const response = await fetch("http://localhost:3000/signup", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-        name: name,
-      }),
-    });
+    const response = await fetch(
+      "https://whispering-taiga-88972-7f7caad2461e.herokuapp.com/signup",
+      {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+          name: name,
+        }),
+      }
+    );
     const user = await response.json();
     if (user.id) {
       loadUser(user);
